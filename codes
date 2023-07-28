@@ -1,0 +1,35 @@
+def water_jug_problem(cap_a, cap_b, goal):
+    jug_a, jug_b = 0, 0
+    steps = []
+    iterations = 0
+    max_iterations = 1000
+
+    while jug_a != goal and iterations < max_iterations:
+        if jug_a == 0:
+            jug_a = cap_a
+            steps.append(f"fill jug a ({cap_a} liters)")
+        elif jug_b < cap_b:
+            pour_amt = min(cap_b - jug_b, jug_a)
+            jug_a =jug_a - pour_amt
+            jug_b =jug_b + pour_amt
+            steps.append(f"pour {pour_amt} liters from jug-a to jug b")
+        else:
+            jug_b = 0
+            steps.append("empty the jug b")
+
+        iterations += 1
+
+    if jug_a != goal:
+        return []
+    return steps
+
+# example usage
+capacity_a =4
+capacity_b =5
+goal_amount =3
+solution_steps = water_jug_problem(capacity_a, capacity_b, goal_amount)
+if solution_steps:
+    for step in solution_steps:
+        print(step)
+else:
+    print("No solution is possible")
