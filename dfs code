@@ -1,0 +1,27 @@
+def dfs(graphs,current,goal, path=[]):
+    path =path + [current]
+    
+    if current == goal:
+        return path
+    for neighbor in graph[current]:
+        if neighbor not in path:
+            result =dfs(graph,neighbor,goal,path)
+        if result:
+            return result
+        # Define the graph as an adjacency list
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+
+# Define the start and goal nodes
+start_node = 'A'
+goal_node = 'F'
+
+# Call the dfs function and print the result
+result_path = dfs(graph, start_node, goal_node)
+print(result_path)
