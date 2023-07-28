@@ -1,0 +1,53 @@
+import heapq
+
+def heuristic(current, goal):
+    # Replace this with an appropriate heuristic function for your problem
+    return abs(current[0] - goal[0]) + abs(current[1] - goal[1])
+
+def a_star(graph, start, goal):
+    open_set = [(0, start)]
+    heapq.heapify(open_set)
+    came_from = {}
+    g_score = {node: float('inf') for node in graph}
+    g_score[start] = 0
+
+    while open_set:
+        _, current = heapq.heappop(open_set)
+
+        if current == goal:
+            path = []
+            while current in came_from:
+                path.append(current)
+                current = came_from[current]
+            path.append(start)
+            path.reverse()
+            return path
+
+        for neighbor in graph[current]:
+            tentative_g_score = g_score[current] + graph[current][neighbor]
+            if tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g_score
+                f_score = tentative_g_score + heuristic(neighbor, goal)
+                heapq.heappush(open_set, (f_score, neighbor))
+
+    return None
+
+# Example usage:
+# Define the graph using an adjacency list representation
+# Format: {node: {neighbor: cost, ...}, ...}
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'A': 1, 'C': 2, 'D': 5},
+    'C': {'A': 4, 'B': 2, 'D': 1},
+    'D': {'B': 5, 'C': 1}
+}
+
+start = 'A'
+goal = 'D'
+shortest_path = a_star(graph, start, goal)
+
+if shortest_path:
+    print(f"Shortest path from {start} to {goal}: {shortest_path}")
+else:
+    print("No path found.")
